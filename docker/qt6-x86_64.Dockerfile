@@ -1,5 +1,5 @@
 # Use Debian 12.10 base image for ARM64 (armv8)
-FROM arm64v8/debian:12.10
+FROM debian:12.10
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive

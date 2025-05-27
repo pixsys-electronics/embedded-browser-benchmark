@@ -25,7 +25,10 @@ For QT6, you first need to get yourself the *simplebrowser* example from the [gi
 ```bash
 # build on target
 podman build -t qt6-browser:arm64 -f qt6-arm64.Dockerfile .
+podman run -v /var/run/wayland-0:/var/run/wayland-0 -e WAYLAND_DISPLAY=/var/run/wayland-0 -e XDG_RUNTIME_DIR=/var/run -v /home/user/qt6-environment/tmp:/home/app/tmp -v /home/user/qt6-environment/dconf:/var/run/dconf -e HOME=/home/app/tmp --userns=keep-id --user $(id -u):$(id -g) --device=/dev/dri localhost/qt6-browser:arm64
 ```
+
+**Note: these container have been tested against WP820-A-P2 and WP620-A-P2. The P4 family has compatibility problems with Panther drivers of the GPU: for QT, the page shows but it crashes at almost every interaction, while for COG the browser window doesn't appear. For a working version with full-library compatibility between the container and the host machine, check [this repo](https://github.com/pixsys-electronics/qt-arm64-demo).**
 
 ## Results
 
