@@ -65,4 +65,4 @@ Each web-browser has been tested against 3 different workloads:
 |CPU (idle) (%)|30|20|35|
 |CPU (interaction) (%)|75|55|70|
 
-**Note: HTML components *input type=range*, in particular the slider and the big knob are not working as expected: the slider moves only when short presses are performed very close to the knob, while the big knob doesn't move at all. It looks like a continuous motion event is not handled correctly by the browser. These interactions, in chromium-based browsers, work correctly** 
+**Note: using COG, HTML components *input type=range* like the slider and the big knob are not working as expected: the slider moves only when short presses are performed very close to the knob, while the big knob doesn't move at all. It looks like a continuous motion event is not handled correctly by the browser. These interactions, in chromium-based browsers, work correctly** 
