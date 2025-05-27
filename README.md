@@ -32,7 +32,12 @@ podman run -v /var/run/wayland-0:/var/run/wayland-0 -e WAYLAND_DISPLAY=/var/run/
 **Note: these container have been tested against WP820-A-P2 and WP620-A-P2. The P4 family has compatibility problems with Panther drivers of the GPU: for QT, the page shows but it crashes at almost every interaction, while for COG the browser window doesn't appear. For a working version with full-library compatibility between the container and the host machine, check [this repo](https://github.com/pixsys-electronics/qt-arm64-demo).**
 
 ## Results
-The target device is a WP820-A-P2. Each resource usage is comprehensive of the basic 
+The target device is a WP820-A-P2. Each resource usage is comprehensive of the basic services running on a web panel (dbus, pixsys-monitor, weston, wp-config, pixsys-portal, NetworkManager). The base resources usage, in this case, are:
+- CPU: 1%
+- RAM: 260MB
+
+The chromium@wp-control and chromium@main-app have been killed to ensure a stable environment.
+
 Each web-browser has been tested against 3 different workloads:
 
 - [browserbench.org](https://browserbench.org/) (speedometer): test the responsiveness
