@@ -25,40 +25,39 @@ For QT6, you first need to get yourself the *simplebrowser* example from the [gi
 ```bash
 # build on target
 podman build -t qt6-browser:arm64 -f qt6-arm64.Dockerfile .
+# run on target
 podman run -v /var/run/wayland-0:/var/run/wayland-0 -e WAYLAND_DISPLAY=/var/run/wayland-0 -e XDG_RUNTIME_DIR=/var/run -v /home/user/qt6-environment/tmp:/home/app/tmp -v /home/user/qt6-environment/dconf:/var/run/dconf -e HOME=/home/app/tmp --userns=keep-id --user $(id -u):$(id -g) --device=/dev/dri localhost/qt6-browser:arm64
 ```
 
 **Note: these container have been tested against WP820-A-P2 and WP620-A-P2. The P4 family has compatibility problems with Panther drivers of the GPU: for QT, the page shows but it crashes at almost every interaction, while for COG the browser window doesn't appear. For a working version with full-library compatibility between the container and the host machine, check [this repo](https://github.com/pixsys-electronics/qt-arm64-demo).**
 
 ## Results
+The target device is a WP820-A-P2. Each resource usage is comprehensive of the basic 
+Each web-browser has been tested against 3 different workloads:
 
-Each web-browser have been tested against 3 different workloads:
-
-- browserbench
-
-podman run -d -v /var/run/wayland-0:/var/run/wayland-0 -v /home/user/qt6-environment:/data/app -e WAYLAND_DISPLAY=/var/run/wayland-0 -e HOME=/data/app/tmp --userns=keep-id --user $(id -u):$(id -g) --device=/dev/dri localhost/qt-runtime:arm64
-
-## Setup
-podman run -v /var/run/wayland-0:/var/run/wayland-0 -v $(pwd):/data/app -v $(pwd)/dconf:/var/run/dconf -e WAYLAND_DISPLAY=/var/run/wayland-0 -e XDG_RUNTIME_DIR=/var/run -e HOME=/data/app --userns=keep-id --user $(id -u):$(id -g) --device=/dev/dri --device=/dev/input localhost/cog:arm64
-
-# Report
-The following browsers have been tested against several tests:
-- QtWebEngine: Chromium-based
-- COG: WebKit-based
-- Chrome: Chromium-based
+- [browserbench.org](https://browserbench.org/) (speedometer): test the responsiveness
+- [pixsys.net](https://www.pixsys.net/): animated banner and overlays
+- collaudo software (webvisu.htm default page): interaction with HTML5 components
 
 ## pixsys.net
-TODO
+||QtWebEngine|COG|Chrome|
+|-|-|-|-|
+|RAM (MB)|500|450|500|
+|CPU (idle) (%)|65|60|60|
+|CPU (interaction) (%)|90|90|90|
 
 ## browserbench.net
-||QtWebEngine|COG|CodeSYS|
+||QtWebEngine|COG|Chrome|
 |-|-|-|-|
-|RAM|||
-|CPU|||
+|Speedometer (points)|X|X|0.3|
+
+**Note: QtWebEngine stops at a fixed test step, showing the "broken page" icon and freezing the whole device. The RAM usage doesn't exceed the limit imposed by podman (it doesn't go over 500MB), so the icon is a mistery. COG refuses to run the benchmark, and due to the lack of logging, the cause is unknown.**
 
 ## collaudo
 ||QtWebEngine|COG|Chrome|
 |-|-|-|-|
-|RAM (MB)|x|300|450|
-|CPU (idle) (%)|x|30|35|
-|CPU (interaction) (%)|x|55|65|
+|RAM (MB)|450|300|450|
+|CPU (idle) (%)|30|20|35|
+|CPU (interaction) (%)|75|55|70|
+
+**Note: HTML components *input type=range*, in particular the slider and the big knob are not working as expected: the slider moves only when short presses are performed very close to the knob, while the big knob doesn't move at all. It looks like a continuous motion event is not handled correctly by the browser. These interactions, in chromium-based browsers, work correctly** 
