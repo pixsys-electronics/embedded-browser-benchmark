@@ -20,7 +20,7 @@ podman run -v /var/run/wayland-0:/var/run/wayland-0 -v $(pwd):/data/app -v $(pwd
 ```
 
 ### QT
-For QT6, you first need to get yourself the *simplebrowser* example from the [github](https://github.com/qt/qtwebengine). Make sure the QT version installed inside your container is the same as the version of the simplebrowser example. To change simplebrowser version, just choose the respective branch in github. The simplebrowser example should be [here](https://github.com/qt/qtwebengine/tree/dev/examples/webenginewidgets/simplebrowser). In this repository, *simplebrowser* is 6.7.3. Then, make sure you have the example folder and the Dockerfile inside your target device, then run:
+For QT6, you first need to get yourself the *simplebrowser* example from the [github](https://github.com/qt/qtwebBrowser). Make sure the QT version installed inside your container is the same as the version of the simplebrowser example. To change simplebrowser version, just choose the respective branch in github. The simplebrowser example should be [here](https://github.com/qt/qtwebBrowser/tree/dev/examples/webenginewidgets/simplebrowser). In this repository, *simplebrowser* is 6.7.3. Then, make sure you have the example folder and the Dockerfile inside your target device, then run:
 
 ```bash
 # build on target
@@ -44,25 +44,28 @@ Each web-browser has been tested against 3 different workloads:
 - [pixsys.net](https://www.pixsys.net/): animated banner and overlays
 - collaudo software (webvisu.htm default page): interaction with HTML5 components
 
-## pixsys.net
-||QtWebEngine|COG|Chrome|
+### pixsys.net
+||QtWebBrowser|COG|Chrome|
 |-|-|-|-|
 |RAM (MB)|500|450|500|
 |CPU (idle) (%)|65|60|60|
 |CPU (interaction) (%)|90|90|90|
 
-## browserbench.net
-||QtWebEngine|COG|Chrome|
+### browserbench.org
+||QtWebBrowser|COG|Chrome|
 |-|-|-|-|
 |Speedometer (points)|X|X|0.3|
 
-**Note: QtWebEngine stops at a fixed test step, showing the "broken page" icon and freezing the whole device. The RAM usage doesn't exceed the limit imposed by podman (it doesn't go over 500MB), so the icon is a mistery. COG refuses to run the benchmark, and due to the lack of logging, the cause is unknown.**
+**Note: QtWebBrowser stops at a fixed test step, showing the "broken page" icon and freezing the whole device. The RAM usage doesn't exceed the limit imposed by podman (it doesn't go over 500MB), so the icon is a mistery. COG refuses to run the benchmark, and due to the lack of logging, the cause is unknown.**
 
-## collaudo
-||QtWebEngine|COG|Chrome|
+### collaudo
+||QtWebBrowser|COG|Chrome|
 |-|-|-|-|
 |RAM (MB)|450|300|450|
 |CPU (idle) (%)|30|20|35|
 |CPU (interaction) (%)|75|55|70|
 
 **Note: using COG, HTML components *input type=range* like the slider and the big knob are not working as expected: the slider moves only when short presses are performed very close to the knob, while the big knob doesn't move at all. It looks like a continuous motion event is not handled correctly by the browser. These interactions, in chromium-based browsers, work correctly** 
+
+## Final considerations
+The comparison between these 3 browsers shows that COG uses on average 20% less resources (both CPU and RAM) than Chrome and QTWebBrowser, but it lacks some input/motion handling and doesn't come with full-support for modern web pages. Chrome is more resource-hungry w.r.t. COG, but it has full support for inputs and web pages. QTWebBrowser has the worst performances.
